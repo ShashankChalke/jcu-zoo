@@ -8,14 +8,14 @@ This is the user stories for the zoo program.
 
 = Details =
 ==AdminUI==
-* Add/Remove Cage *
-* Select cage to edit
-* Modify number of gates
-* Modify cage size
-* Modify cage type
-* Create a type of animal
-* Add animal to cage
+  * Add/Remove Cage
+  * Select cage to edit
+  * Modify number of gates
+  * Modify cage size
+  * Modify cage type
+  * Create a type of animal
+  * Add animal to cage
 
 
 ==CageUI==
-* List cage door
+  * List cage door
