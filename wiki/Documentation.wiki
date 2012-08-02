@@ -1,8 +1,8 @@
-#summary One-sentence summary of this page.
+#summary Links to all the documentation to be hosted on Google Docs.
 
 = Introduction =
 
-Links to all the documentation hosted on Google Docs
+Put all the links to documentation here :)
 
 
 = Links =
