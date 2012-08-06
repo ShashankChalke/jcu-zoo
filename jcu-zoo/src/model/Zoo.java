@@ -26,8 +26,6 @@ public class Zoo {
             } else {
                 // THROW EXCEPTION
             }
-                    
-            //this.cages.size(); if greater than existing number add cage else remove cages
         } else {
             // THROW EXCEPTION
         }
