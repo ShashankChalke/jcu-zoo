@@ -20,5 +20,11 @@ public interface IAdminDAO {
     void removeCage(Cage cage); //remove a specific cage
     void updateCage(Cage cage);
     ArrayList<Cage> getCages();
+    Gate createGate();
+    Gate getGate(int gateId);
+    void updateGate(Gate gate);
+    void addGateToCage(Gate gate,Cage cage);
+    void removeGate(Gate gate);
+    //int getNumOfGates(Cage cage);
 
 }

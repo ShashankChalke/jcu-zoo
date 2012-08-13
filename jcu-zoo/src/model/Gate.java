@@ -9,15 +9,38 @@ package model;
  * @author Panda
  */
 public class Gate {
-    int cageId;
     int gateId;
     boolean isLocked;
     boolean isClosed;
-    Gate(){
-        
+    public Gate(int gateId,boolean isClosed, boolean isLocked){
+        this.gateId = gateId;
+        this.isClosed = isClosed;
+        this.isLocked = isLocked;
     }
-    void openGate(){}
-    void closeGate(){}
-    void lockGate(){}
+    public int getGateId(){
+        return this.gateId;
+    }
+    void open(){
+        this.isClosed = false;
+    }
+    void close(){
+        this.isClosed = true;
+    }
+    void lock(){
+        this.isLocked = true;
+    }
+    void unlock(){
+        this.isLocked = false;
+    }
     
+    public boolean isLocked(){
+        return this.isLocked;
+    }
+    public boolean isClosed(){
+        return this.isClosed;
+    }
+    @Override
+    public String toString(){
+        return Integer.toString(gateId) + ", isClosed: " + Boolean.toString(isClosed) + ", isLocked: " + Boolean.toString(isLocked);
+    }
 }
