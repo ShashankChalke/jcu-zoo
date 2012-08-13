@@ -4,8 +4,8 @@
  */
 package model;
 
-import adminUI.AdminDAO;
-import adminUI.IAdminDAO;
+import database.admin.AdminDAO;
+import database.admin.IAdminDAO;
 
 /**
  *
