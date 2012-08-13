@@ -9,5 +9,15 @@ package model;
  * @author Panda
  */
 public class Gate {
+    int cageId;
+    int gateId;
+    boolean isLocked;
+    boolean isClosed;
+    Gate(){
+        
+    }
+    void openGate(){}
+    void closeGate(){}
+    void lockGate(){}
     
 }

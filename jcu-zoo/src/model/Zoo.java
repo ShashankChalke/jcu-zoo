@@ -4,6 +4,9 @@
  */
 package model;
 
+import adminUI.AdminDAO;
+import adminUI.Configuration;
+import adminUI.IAdminDAO;
 import java.util.ArrayList;
 
 /**
@@ -11,14 +14,15 @@ import java.util.ArrayList;
  * @author Panda
  */
 public class Zoo {
-    private ArrayList<Cage> cages  = new ArrayList<Cage>();
+    IAdminDAO adminDAO = AdminDAO.getInstanceOf();
+    //private ArrayList<Cage> cages  = new ArrayList<Cage>();
     public Zoo(){
         
     }
     void setNumOfCages(int numCages){
         // check that the num of cages is between min 1 and max 100
         if (numCages > 0 && numCages <= 100){
-            int diff = numCages - this.cages.size();
+            int diff = numCages - adminDAO.getNumOfCages();
             if (diff > 0){
                 addCages(diff);
             } else if (diff < 0){
@@ -33,26 +37,23 @@ public class Zoo {
     }
     void addCages(int numCages){
         for (int i = numCages; i > 0; i--){
-            this.cages.add(new Cage());
+            adminDAO.addCage();
         }
     }
     void removeCages(int numCages){
         for (int i = numCages; i > 0; i--){
-            this.cages.remove(cages.size()-1);
+            adminDAO.removeLastCage();
         }
     }
-    ArrayList<Cage> getCages(){        
-        return this.cages;
-    }    
     public static void main(String[] args) {
+        //Test for get num of cages
+        Configuration.loadConfigurationFromFile();
         Zoo zoo = new Zoo();
-        ArrayList<Cage> cages = zoo.getCages();
-        System.out.println(cages.size());
+        IAdminDAO adminDAO = AdminDAO.getInstanceOf();
+        System.out.println(adminDAO.getNumOfCages());
         zoo.setNumOfCages(3);
-        cages = zoo.getCages();
-        System.out.println(cages.size());
+        System.out.println(adminDAO.getNumOfCages());
         zoo.setNumOfCages(2);
-        cages = zoo.getCages();
-        System.out.println(cages.size());                
+        System.out.println(adminDAO.getNumOfCages());                
     }
 }
