@@ -4,14 +4,15 @@
  */
 package model;
 
-import java.util.ArrayList;
+import adminUI.AdminDAO;
+import adminUI.IAdminDAO;
 
 /**
  *
  * @author Panda
  */
 public class Cage {
-    private ArrayList<Gate> gates = new ArrayList<Gate>();
+    IAdminDAO dao = AdminDAO.getInstanceOf();
     private int cageId;
     private String cageName;
     private Float latitude;
@@ -78,29 +79,19 @@ public class Cage {
     public void setTypeId(Integer typeId) {
         this.typeId = typeId;
     }
-    public void setNumOfDoors(int numGates){
-        int diff = numGates - this.gates.size();
-         if (diff > 0){
-            addGates(diff);
-        } else if (diff < 0){
-            removeGates(0 - diff);
-        }
-    }
+    
     
     public static void main(String[] args) {
         
     }
 
-    private void addGates(int numGates) {
-        for (int i = numGates; i > 0; i--){
-            this.gates.add(new Gate());
-        }
+    public void addGate() {
+        dao.addGateToCage(dao.createGate(),this);
+
     }
 
-    private void removeGates(int numGates) {
-        for (int i = numGates; i > 0; i--){
-            this.gates.add(new Gate());
-        }
+    public void removeGate(Gate gate) {
+        dao.removeGate(gate);
     }
     
     @Override
