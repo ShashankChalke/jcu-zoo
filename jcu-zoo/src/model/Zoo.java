@@ -4,9 +4,9 @@
  */
 package model;
 
-import adminUI.AdminDAO;
-import adminUI.Configuration;
-import adminUI.IAdminDAO;
+import database.admin.AdminDAO;
+import database.Configuration;
+import database.admin.IAdminDAO;
 import java.util.ArrayList;
 
 /**
