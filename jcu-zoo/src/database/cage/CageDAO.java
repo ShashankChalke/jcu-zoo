@@ -85,13 +85,17 @@ public class CageDAO implements ICageDAO{
             preparedStatement = (PreparedStatement) conn.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
-                cages.add(new Cage(resultSet.getInt("CAGE_ID"),
-                        (String) resultSet.getString("CAGE_NAME"),
-                        (Float) resultSet.getFloat("LATITUDE"),
-                        (Float) resultSet.getFloat("LONGITUDE"),
-                        (Integer) resultSet.getInt("TYPE_ID"),
-                        (Boolean) resultSet.getBoolean("HAS_HUMAN"),
-                        (Boolean) resultSet.getBoolean("HAS_ANIMAL")));
+                while (resultSet.next()){
+                    cages.add(new Cage(resultSet.getInt("CAGE_ID"),
+                            (String) resultSet.getString("CAGE_NAME"),
+                            (Float) resultSet.getFloat("LATITUDE"),
+                            (Float) resultSet.getFloat("LONGITUDE"),
+                            (String) resultSet.getString("CAGE_TYPE"),
+                            (Boolean) resultSet.getBoolean("HAS_HUMAN"),
+                            (Boolean) resultSet.getBoolean("HAS_ANIMAL"),
+                            (String) resultSet.getString("EXHIBIT_NAME"),
+                            (String) resultSet.getString("EXHIBIT_DESCRIPTION")));
+                }
             }
         } catch (Exception ex){
             Logger.getLogger(CageDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 import database.admin.AdminDAO;
 import database.admin.IAdminDAO;
 
@@ -12,32 +14,41 @@ import database.admin.IAdminDAO;
  * @author Panda
  */
 public class Cage {
-    IAdminDAO dao = AdminDAO.getInstanceOf();
+    static IAdminDAO dao = AdminDAO.getInstanceOf();
     private int cageId;
     private String cageName;
     private Float latitude;
     private Float longitude;
-    private Integer typeId;
+    private String cageType;
     private boolean hasHuman;
     private boolean hasAnimal;
-    public Cage(int cageId, String cageName, Float latitude, Float longitude, Integer typeId, boolean hasHuman, boolean hasAnimal){
+    private String exhibitName;
+    private String exhibitDesc;
+    public static ArrayList<Cage> getCages(){
+    	return dao.getCages();
+    }
+    public static int getNumOfCages(){
+    	return dao.getNumOfCages();
+    }
+    public static Cage getCage(int cageId){
+    	return dao.getCage(cageId);
+    }
+    public Cage(int cageId, String cageName, Float latitude, Float longitude, String cageType, boolean hasHuman, boolean hasAnimal, String exhibitName, String exhibitDesc){
         this.cageId = cageId;
         this.cageName = cageName;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.typeId = typeId;
+        this.cageType = cageType;
         this.hasHuman = hasHuman;
         this.hasAnimal = hasAnimal;
+        this.setExhibitName(exhibitName);
+        this.setExhibitDesc(exhibitDesc);
     }
     public int getCageId(){
         return cageId;
     }
     public String getCageName() {
         return cageName;
-    }
-
-    public void setCageName(String cageName) {
-        this.cageName = cageName;
     }
 
     public boolean hasAnimal() {
@@ -59,7 +70,9 @@ public class Cage {
     public Float getLatitude() {
         return latitude;
     }
-
+    public int getNumOfGates(){
+    	return dao.getNumOfGates(this);
+    }
     public void setLatitude(Float latitude) {
         this.latitude = latitude;
     }
@@ -72,26 +85,31 @@ public class Cage {
         this.longitude = longitude;
     }
 
-    public Integer getTypeId() {
-        return typeId;
+    public String getCageType() {
+        return this.cageType;
     }
 
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
+    public void setCageType(String cageType) {
+        this.cageType = cageType;
     }
     
     
-    public static void main(String[] args) {
+    public String getExhibitName() {
+		return exhibitName;
+	}
+	public void setExhibitName(String exhibitName) {
+		this.exhibitName = exhibitName;
+	}
+	public static void main(String[] args) {
         
     }
 
     public void addGate() {
-        dao.addGateToCage(dao.createGate(),this);
-
+        dao.addGateToCage(this);
     }
 
-    public void removeGate(Gate gate) {
-        dao.removeGate(gate);
+    public void removeGate() {
+        dao.removeGate(this);
     }
     
     @Override
@@ -100,10 +118,16 @@ public class Cage {
                 ", " + this.cageName + 
                 ", Lat: " + Float.toString(this.latitude) +
                 ", Long: " + Float.toString(this.longitude) +
-                ", TypeID: " + Integer.toString(this.typeId) +
+                ", TypeID: " + this.cageType +
                 ", hasAnimal: " + Boolean.toString(hasAnimal) +
                 ", hasHuman: " + Boolean.toString(hasHuman);
     }
+	public String getExhibitDesc() {
+		return exhibitDesc;
+	}
+	public void setExhibitDesc(String exhibitDesc) {
+		this.exhibitDesc = exhibitDesc;
+	}
     
     
 }
