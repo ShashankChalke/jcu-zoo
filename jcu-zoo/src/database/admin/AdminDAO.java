@@ -6,6 +6,7 @@ package database.admin;
 
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
+
 import database.Configuration;
 import database.MySQLConnection;
 import java.sql.ResultSet;
@@ -120,7 +121,7 @@ public class AdminDAO implements IAdminDAO{
             preparedStatement.setString(1,cage.getCageName());
             preparedStatement.setFloat(2,cage.getLatitude());
             preparedStatement.setFloat(3, cage.getLongitude());
-            preparedStatement.setInt(4,cage.getTypeId());
+            preparedStatement.setString(4,cage.getCageType());
             preparedStatement.setBoolean(5, cage.hasHuman());
             preparedStatement.setBoolean(6, cage.hasAnimal());
             preparedStatement.setInt(7, cage.getCageId());
@@ -174,9 +175,11 @@ public class AdminDAO implements IAdminDAO{
                         (String) resultSet.getString("CAGE_NAME"),
                         (Float) resultSet.getFloat("LATITUDE"),
                         (Float) resultSet.getFloat("LONGITUDE"),
-                        (Integer) resultSet.getInt("TYPE_ID"),
+                        (String) resultSet.getString("CAGE_TYPE"),
                         (Boolean) resultSet.getBoolean("HAS_HUMAN"),
-                        (Boolean) resultSet.getBoolean("HAS_ANIMAL")));
+                        (Boolean) resultSet.getBoolean("HAS_ANIMAL"),
+                        (String) resultSet.getString("EXHIBIT_NAME"),
+                        (String) resultSet.getString("EXHIBIT_DESCRIPTION")));
             }
         } catch (Exception ex){
             Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -184,6 +187,34 @@ public class AdminDAO implements IAdminDAO{
             cleanUp();
         }        
          return cages;
+    }
+    @Override
+    public Cage getCage(int cageId) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+        Cage cage = null;
+         try {
+            connect();
+            query = "SELECT * FROM CAGE WHERE CAGE_ID=?";
+            preparedStatement = (PreparedStatement) conn.prepareStatement(query);
+            preparedStatement.setInt(1, cageId);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                cage = new Cage(resultSet.getInt("CAGE_ID"),
+                        (String) resultSet.getString("CAGE_NAME"),
+                        (Float) resultSet.getFloat("LATITUDE"),
+                        (Float) resultSet.getFloat("LONGITUDE"),
+                        (String) resultSet.getString("CAGE_TYPE"),
+                        (Boolean) resultSet.getBoolean("HAS_HUMAN"),
+                        (Boolean) resultSet.getBoolean("HAS_ANIMAL"),
+                        (String) resultSet.getString("EXHIBIT_NAME"),
+                        (String) resultSet.getString("EXHIBIT_DESCRIPTION"));
+            }
+        } catch (Exception ex){
+            Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cleanUp();
+        }        
+         return cage;
     }
     public static void main(String[] args) {
         Configuration.loadConfigurationFromFile();
@@ -194,12 +225,17 @@ public class AdminDAO implements IAdminDAO{
         System.out.println(adminDAO.getNumOfCages());
         adminDAO1.removeLastCage();
         System.out.println(adminDAO1.getNumOfCages());
-        System.out.println(adminDAO1.getCages().toString());
+        ArrayList<Cage> cages = adminDAO1.getCages(); 
+        for (Cage c : cages){
+        	System.out.println(c.toString());
+        	System.out.println(adminDAO1.getCage(c.getCageId()).toString());
+        	c.addGate();
+        }
+        
     }
 
 
-    @Override
-    public Gate createGate() {
+    private Gate createGate() {
         int gateKey = -1;
         try {
             connect();
@@ -215,11 +251,13 @@ public class AdminDAO implements IAdminDAO{
         } finally {
             cleanUp();
         }
+        System.out.println(gateKey);
         return getGate(gateKey);
     }
 
     @Override
-    public void addGateToCage(Gate gate, Cage cage) {
+    public void addGateToCage(Cage cage) {
+    	Gate gate = createGate();
         try {
             connect();
             query = "INSERT INTO CAGE_GATES(CAGE_ID,GATE_ID) VALUES (?,?)";
@@ -239,7 +277,9 @@ public class AdminDAO implements IAdminDAO{
         Gate gate = null;
         try {
             connect();
+            query = "SELECT * FROM GATE WHERE GATE_ID=?";
             preparedStatement = (PreparedStatement) conn.prepareStatement(query);
+            preparedStatement.setInt(1,gateId);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 gate = new Gate(resultSet.getInt("GATE_ID"),resultSet.getBoolean("IS_CLOSED"),resultSet.getBoolean("IS_LOCKED"));
@@ -270,12 +310,13 @@ public class AdminDAO implements IAdminDAO{
     }
 
     @Override
-    public void removeGate(Gate gate) {
+    public void removeGate(Cage cage) {
         try {
             connect();
-            query = "DELETE FROM GATE WHERE GATE_ID=?";
+            
+            query = "DELETE FROM CAGE_GATES WHERE CAGE_ID=? LIMIT 1";
             preparedStatement = (PreparedStatement) conn.prepareStatement(query);
-            preparedStatement.setInt(1, gate.getGateId());
+            preparedStatement.setInt(1, cage.getCageId());
             preparedStatement.executeUpdate();
             
         } catch (Exception ex){
@@ -283,6 +324,42 @@ public class AdminDAO implements IAdminDAO{
         } finally {
             cleanUp();
         }
+        removeUnusedGates();
     }
+    
+    private void removeUnusedGates() {
+        try {
+            connect();
+            
+            query = "DELETE FROM GATE WHERE GATE_ID NOT IN (SELECT GATE_ID FROM CAGE_GATES)";
+            preparedStatement = (PreparedStatement) conn.prepareStatement(query);
+            preparedStatement.executeUpdate();
+            
+        } catch (Exception ex){
+            Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cleanUp();
+        }
+    }    
+	@Override
+	public Integer getNumOfGates(Cage cage) {
+        Integer numOfGates = null;
+        try {
+            connect();
+            query = "SELECT COUNT(*) FROM GATE, CAGE_GATES WHERE GATE.GATE_ID=CAGE_GATES.GATE_ID AND CAGE_GATES.CAGE_ID=?";        
+            preparedStatement = (PreparedStatement) conn.prepareStatement(query);
+            preparedStatement.setInt(1, cage.getCageId());
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                numOfGates = resultSet.getInt(1);
+            }
+        } catch (Exception ex){
+            Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            cleanUp();
+        }
+        return numOfGates;
+	}
+	
 
 }

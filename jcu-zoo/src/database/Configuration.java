@@ -15,12 +15,18 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Configuration {
-
+	private static boolean isLoaded = false;
     public static String hostname;
     public static String databaseName;
     public static String dbUser;
     public static String dbPassword;
-
+    public static boolean isLoaded(){
+    	return isLoaded;
+    }
+    public static void load(){
+    	loadConfigurationFromFile();
+    	isLoaded = true;
+    }
     public static void loadConfigurationFromCode() {
         System.out.println("Loading configuration settings from code...");
         
@@ -69,7 +75,6 @@ public class Configuration {
     }
 
     public static void main(String[] args) {
-        Configuration config = new Configuration();
         Configuration.loadConfigurationFromCode();
         Configuration.writeConfiguration();
     }
