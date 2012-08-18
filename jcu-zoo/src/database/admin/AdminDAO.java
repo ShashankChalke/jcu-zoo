@@ -116,7 +116,7 @@ public class AdminDAO implements IAdminDAO{
     public void updateCage(Cage cage) {
         try {
             connect();
-            query = "UPDATE CAGE SET CAGE_NAME=?, LATITUDE=?, LONGITUDE=?, TYPE_ID=?, HAS_HUMAN=?, HAS_ANIMAL=? WHERE CAGE_ID=?";        
+            query = "UPDATE CAGE SET CAGE_NAME=?, LATITUDE=?, LONGITUDE=?, CAGE_TYPE=?, HAS_HUMAN=?, HAS_ANIMAL=?, EXHIBIT_NAME=?, EXHIBIT_DESCRIPTION=? WHERE CAGE_ID=?";        
             preparedStatement = (PreparedStatement) conn.prepareStatement(query);
             preparedStatement.setString(1,cage.getCageName());
             preparedStatement.setFloat(2,cage.getLatitude());
@@ -124,7 +124,9 @@ public class AdminDAO implements IAdminDAO{
             preparedStatement.setString(4,cage.getCageType());
             preparedStatement.setBoolean(5, cage.hasHuman());
             preparedStatement.setBoolean(6, cage.hasAnimal());
-            preparedStatement.setInt(7, cage.getCageId());
+            preparedStatement.setString(7,cage.getExhibitName());
+            preparedStatement.setString(8,cage.getExhibitDesc());
+            preparedStatement.setInt(9, cage.getCageId());
             preparedStatement.executeUpdate();
         } catch (Exception ex){
             Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
