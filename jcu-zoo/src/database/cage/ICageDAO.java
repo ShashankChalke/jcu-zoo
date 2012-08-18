@@ -13,7 +13,8 @@ import model.Gate;
  * @author Panda
  */
 public interface ICageDAO {
-    ArrayList<Cage> getCages();
+    //ArrayList<Cage> getCages();
     ArrayList<Gate> getGates(Cage cage);
     void updateGate(Gate gate);
+    Gate getGate(int gateId);
 }

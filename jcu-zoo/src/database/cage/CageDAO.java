@@ -75,7 +75,7 @@ public class CageDAO implements ICageDAO{
             Logger.getLogger(CageDAO.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
-    @Override
+    /* @Override
     public ArrayList<Cage> getCages() {
         //throw new UnsupportedOperationException("Not supported yet.");
         ArrayList<Cage> cages = new ArrayList<Cage>();
@@ -103,19 +103,19 @@ public class CageDAO implements ICageDAO{
             cleanUp();
         }        
          return cages;
-    }
+    }*/
 
     @Override
     public ArrayList<Gate> getGates(Cage cage) {
         ArrayList<Gate> gates = new ArrayList<Gate>();
         try {
             connect();
-            query = "SELECT * FROM GATES WHERE CAGE_ID=?";
+            query = "SELECT GATE.GATE_ID, GATE.IS_CLOSED, GATE.IS_LOCKED FROM GATE,CAGE_GATES WHERE CAGE_GATES.CAGE_ID=? AND GATE.GATE_ID=CAGE_GATES.GATE_ID";
             preparedStatement = (PreparedStatement) conn.prepareStatement(query);
             preparedStatement.setInt(1, cage.getCageId());
             resultSet = preparedStatement.executeQuery();                        
             while (resultSet.next()){
-                gates.add(new Gate(resultSet.getInt("CAGE_ID"),resultSet.getBoolean("IS_CLOSED"),resultSet.getBoolean("IS_LOCKED")));
+                gates.add(new Gate(resultSet.getInt("GATE_ID"),resultSet.getBoolean("IS_CLOSED"),resultSet.getBoolean("IS_LOCKED")));
             }
                     
         } catch (Exception ex){
@@ -142,5 +142,23 @@ public class CageDAO implements ICageDAO{
             cleanUp();
         }
     }
+	@Override
+	public Gate getGate(int gateId) {
+		Gate gate = null;
+		try {
+            query = "SELECT * FROM GATE WHERE GATE_ID=?";
+            preparedStatement = (PreparedStatement) conn.prepareStatement(query);
+            preparedStatement.setInt(1, gateId);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+            	gate = new Gate(resultSet.getInt("GATE_ID"),resultSet.getBoolean("IS_CLOSED"),resultSet.getBoolean("IS_LOCKED"));
+            }
+		} catch (Exception ex){
+			Logger.getLogger(CageDAO.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			cleanUp();
+		}
+		return gate;
+	}
     
 }

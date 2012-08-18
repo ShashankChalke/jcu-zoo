@@ -8,13 +8,16 @@ import java.util.ArrayList;
 
 import database.admin.AdminDAO;
 import database.admin.IAdminDAO;
+import database.cage.CageDAO;
+import database.cage.ICageDAO;
 
 /**
  *
  * @author Panda
  */
 public class Cage {
-    static IAdminDAO dao = AdminDAO.getInstanceOf();
+    static IAdminDAO adminDAO = AdminDAO.getInstanceOf();
+    static ICageDAO cageDAO = CageDAO.getInstanceOf();
     private int cageId;
     private String cageName;
     private Float latitude;
@@ -25,13 +28,48 @@ public class Cage {
     private String exhibitName;
     private String exhibitDesc;
     public static ArrayList<Cage> getCages(){
-    	return dao.getCages();
+    	return adminDAO.getCages();
+    }
+    public static void setNumOfCages(int numCages){
+        // check that the num of cages is between min 1 and max 100
+        if (numCages > 0 && numCages <= 100){
+            int diff = numCages - adminDAO.getNumOfCages();
+            if (diff > 0){
+                addCages(diff);
+            } else if (diff < 0){
+                removeCages(0 - diff);
+            } else {
+                // THROW EXCEPTION
+            }
+        } else {
+            // THROW EXCEPTION
+        }
+        
+    }
+    /*public static void addCage(){
+    	dao.addCage();
+    }*/
+    public static void removeCage(Cage cage){
+    	adminDAO.removeCage(cage);
+    }
+    public static void updateCage(Cage cage){
+    	adminDAO.updateCage(cage);
     }
     public static int getNumOfCages(){
-    	return dao.getNumOfCages();
+    	return adminDAO.getNumOfCages();
     }
     public static Cage getCage(int cageId){
-    	return dao.getCage(cageId);
+    	return adminDAO.getCage(cageId);
+    }
+    private static void addCages(int numCages){
+        for (int i = numCages; i > 0; i--){
+            adminDAO.addCage();
+        }
+    }
+    private static void removeCages(int numCages){
+        for (int i = numCages; i > 0; i--){
+            adminDAO.removeLastCage();
+        }
     }
     public Cage(int cageId, String cageName, Float latitude, Float longitude, String cageType, boolean hasHuman, boolean hasAnimal, String exhibitName, String exhibitDesc){
         this.cageId = cageId;
@@ -71,7 +109,7 @@ public class Cage {
         return latitude;
     }
     public int getNumOfGates(){
-    	return dao.getNumOfGates(this);
+    	return adminDAO.getNumOfGates(this);
     }
     public void setLatitude(Float latitude) {
         this.latitude = latitude;
@@ -105,11 +143,11 @@ public class Cage {
     }
 
     public void addGate() {
-        dao.addGateToCage(this);
+        adminDAO.addGateToCage(this);
     }
 
     public void removeGate() {
-        dao.removeGate(this);
+        adminDAO.removeGate(this);
     }
     
     @Override
@@ -127,6 +165,9 @@ public class Cage {
 	}
 	public void setExhibitDesc(String exhibitDesc) {
 		this.exhibitDesc = exhibitDesc;
+	}
+	public ArrayList<Gate> getGates(){
+		return cageDAO.getGates(this);
 	}
     
     

@@ -39,14 +39,38 @@ public class Admin extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		StringBuffer sb = new StringBuffer();
-		if ((request.getParameter("action") != null) && request.getParameter("action").equals("modify")){
+		if (request.getParameter("action") != null){
+			if (request.getParameter("action").equals("modify")){
 			sb.append(showCageEditor(Cage.getCage(Integer.valueOf(request.getParameter("cageId"))),request));
-		} else {
-			sb.append(showCageListing());
+			} else if (request.getParameter("action").equals("save")){
+				save(request);
+			} else if (request.getParameter("action").equals("delete")){
+				delete(request);
+			} else if (request.getParameter("action").equals("set")){
+				Cage.setNumOfCages(Integer.valueOf(request.getParameter("numOfCages")));
+			}
 		}
+		sb.append(showCageListing());
 		
 		out.println(sb);
 		out.close();		
+	}
+
+	private void delete(HttpServletRequest request) {
+		Cage.removeCage(Cage.getCage(Integer.valueOf(request.getParameter("cageId"))));
+		
+	}
+
+	private void save(HttpServletRequest request) {
+		int cageId = Integer.valueOf(request.getParameter("cageId"));
+		String cageName = request.getParameter("cageName");
+		float longitude = Float.valueOf(request.getParameter("longitude"));
+		float latitude = Float.valueOf(request.getParameter("latitude"));
+		String exhibitName = request.getParameter("exhibitName");
+		String exhibitDesc = request.getParameter("exhibitDesc");
+		String cageType = request.getParameter("cageType");
+		Cage.updateCage(new Cage(cageId,cageName,latitude,longitude,cageType,false,false,exhibitName,exhibitDesc));
+		
 	}
 
 	/**
@@ -57,6 +81,8 @@ public class Admin extends HttpServlet {
 		// if (post
 		doGet(request,response);
 	}
+
+
 	private String showCageEditor(Cage cage,HttpServletRequest request){
 		//action=modify
 		if (request.getParameter("numGates") != null){
@@ -91,7 +117,7 @@ public class Admin extends HttpServlet {
 		sb.append("<label for='exhibitDesc'>Exhibit Description: </label>" +
 				"<textarea name='exhibitDesc'>" + cage.getExhibitDesc()  + "</textarea>");
 		sb.append("<p>" + cage.toString() + "</p>");
-		
+		sb.append("<input type='submit' name='action' value='save' /><a href='Admin'>Go Back</a>");
 		sb.append("</form>");
 		sb.append("</div>");
 		
@@ -102,6 +128,9 @@ public class Admin extends HttpServlet {
 		ArrayList<Cage> cages = Cage.getCages();
 		sb.append("<div>");
 		sb.append("<h1>Cage Listings</h1>");
+		sb.append("<form method='POST' action='Admin'>" +
+				"<label for='numOfCages'>Enter desired number of cages:</label><input type='textbox' name='numOfCages' value='"+Cage.getNumOfCages()+"' />" +
+				"<input type='submit' name='action' value='set' /></form>");
 		if (cages.isEmpty()){
 			sb.append("<p>No cages yet available</p>");
 		} else {
