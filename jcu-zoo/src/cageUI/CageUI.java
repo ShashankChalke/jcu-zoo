@@ -12,10 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import database.Configuration;
 
-import sun.awt.image.OffScreenImage;
+import model.*;
 
-import model.Cage;
-import model.Gate;
+
 
 /**
  * Servlet implementation class Cage
@@ -38,6 +37,7 @@ public class CageUI extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
@@ -63,6 +63,7 @@ public class CageUI extends HttpServlet {
 					Cage.updateCage(cage);
 				} else if (request.getParameter("updateType").equals("gates")){
 					Gate gate = Gate.getGate(Integer.valueOf(request.getParameter("gateId")));
+
 					if (request.getParameter("gateAction") != null)
 						if (request.getParameter("gateAction").equals("open")){
 							gate.open();
@@ -97,7 +98,7 @@ public class CageUI extends HttpServlet {
 			sb.append("<form action='Cage' method='POST'>");
 			sb.append("<input type='hidden' name='gateId' value='"+ Integer.toString(gate.getGateId()) + "' />");
 			sb.append("<input type='hidden' name='cageId' value='"+ Integer.toString(cage.getCageId()) + "' />");
-			sb.append("<input type='hidden' name='action' value='update'");
+			sb.append("<input type='hidden' name='action' value='update' />");
 			sb.append("<input type='hidden' name='updateType' value='gates' />");
 			if (gate.isClosed()){
 				sb.append("<input type='submit' name='gateAction' value='open' />");
@@ -159,6 +160,7 @@ public class CageUI extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request,response);
 	}

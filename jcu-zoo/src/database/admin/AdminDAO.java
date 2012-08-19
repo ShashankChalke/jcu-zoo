@@ -174,14 +174,14 @@ public class AdminDAO implements IAdminDAO{
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 cages.add(new Cage(resultSet.getInt("CAGE_ID"),
-                        (String) resultSet.getString("CAGE_NAME"),
-                        (Float) resultSet.getFloat("LATITUDE"),
-                        (Float) resultSet.getFloat("LONGITUDE"),
-                        (String) resultSet.getString("CAGE_TYPE"),
-                        (Boolean) resultSet.getBoolean("HAS_HUMAN"),
-                        (Boolean) resultSet.getBoolean("HAS_ANIMAL"),
-                        (String) resultSet.getString("EXHIBIT_NAME"),
-                        (String) resultSet.getString("EXHIBIT_DESCRIPTION")));
+                        resultSet.getString("CAGE_NAME"),
+                        resultSet.getFloat("LATITUDE"),
+                        resultSet.getFloat("LONGITUDE"),
+                        resultSet.getString("CAGE_TYPE"),
+                        resultSet.getBoolean("HAS_HUMAN"),
+                        resultSet.getBoolean("HAS_ANIMAL"),
+                        resultSet.getString("EXHIBIT_NAME"),
+                        resultSet.getString("EXHIBIT_DESCRIPTION")));
             }
         } catch (Exception ex){
             Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -202,14 +202,14 @@ public class AdminDAO implements IAdminDAO{
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 cage = new Cage(resultSet.getInt("CAGE_ID"),
-                        (String) resultSet.getString("CAGE_NAME"),
-                        (Float) resultSet.getFloat("LATITUDE"),
-                        (Float) resultSet.getFloat("LONGITUDE"),
-                        (String) resultSet.getString("CAGE_TYPE"),
-                        (Boolean) resultSet.getBoolean("HAS_HUMAN"),
-                        (Boolean) resultSet.getBoolean("HAS_ANIMAL"),
-                        (String) resultSet.getString("EXHIBIT_NAME"),
-                        (String) resultSet.getString("EXHIBIT_DESCRIPTION"));
+                        resultSet.getString("CAGE_NAME"),
+                        resultSet.getFloat("LATITUDE"),
+                        resultSet.getFloat("LONGITUDE"),
+                        resultSet.getString("CAGE_TYPE"),
+                        resultSet.getBoolean("HAS_HUMAN"),
+                        resultSet.getBoolean("HAS_ANIMAL"),
+                        resultSet.getString("EXHIBIT_NAME"),
+                        resultSet.getString("EXHIBIT_DESCRIPTION"));
             }
         } catch (Exception ex){
             Logger.getLogger(AdminDAO.class.getName()).log(Level.SEVERE, null, ex);
