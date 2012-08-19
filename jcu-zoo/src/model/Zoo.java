@@ -7,7 +7,6 @@ package model;
 import database.admin.AdminDAO;
 import database.Configuration;
 import database.admin.IAdminDAO;
-import java.util.ArrayList;
 
 /**
  *

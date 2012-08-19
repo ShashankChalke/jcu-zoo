@@ -129,6 +129,7 @@ public class CageDAO implements ICageDAO{
     @Override
     public void updateGate(Gate gate) {
         try {
+        	connect();
             query = "UPDATE GATE SET IS_CLOSED=?, IS_LOCKED=? WHERE GATE_ID=?";
             preparedStatement = (PreparedStatement) conn.prepareStatement(query);
             preparedStatement.setBoolean(1, gate.isClosed());
@@ -146,6 +147,7 @@ public class CageDAO implements ICageDAO{
 	public Gate getGate(int gateId) {
 		Gate gate = null;
 		try {
+			connect();
             query = "SELECT * FROM GATE WHERE GATE_ID=?";
             preparedStatement = (PreparedStatement) conn.prepareStatement(query);
             preparedStatement.setInt(1, gateId);

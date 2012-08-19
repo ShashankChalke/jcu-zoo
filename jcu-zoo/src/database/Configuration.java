@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
+ 
 public class Configuration {
 	private static boolean isLoaded = false;
     public static String hostname;
