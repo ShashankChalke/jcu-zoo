@@ -35,11 +35,10 @@ class Cage{
     }
     static function loadDefaultMemberFields(){
          if (!isset(Cage::$adminDAO)){
-            Cage::$adminDAO = new AdminDAO();
+            self::$adminDAO = new AdminDAO();
 
         }
     }
-    
     
 
     public function getCageType(){

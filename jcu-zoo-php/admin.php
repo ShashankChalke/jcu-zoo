@@ -18,7 +18,6 @@ class AdminUI{
         if ($this->admin->getNumOfCages() == 0){
             echo "<p>No cages yet available</p>";
         } else { 
-            echo("<table>");
             echo "<table><tr><td>Cage Id</td><td>Cage Name</td><td>Cage Type</td><td>Latitude</td><td>Longitude</td><td>Number of gates</td><td>Exhibit name</td><td>Exhibit Description</td><td>Controls</td></tr>";
             foreach ($this->admin->getCages() as $cage){
                 echo "<tr>";
