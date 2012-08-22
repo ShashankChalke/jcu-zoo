@@ -26,6 +26,7 @@ class MySQLConnection {
    public function getConnection(){
        return $this->dbh;
    }
+
 }
 
 ?>
