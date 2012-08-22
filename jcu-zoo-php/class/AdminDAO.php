@@ -1,13 +1,10 @@
 <?php 
 error_reporting(E_ALL ^ E_NOTICE);
-include_once("MySQLConnection.php");
-include_once("Cage.php");
-include_once("Gate.php");
-interface IAdminDAO{
-    public function getCages();
-    public function getCage($cageId);
-}
-class AdminDAO implements IAdminDAO{
+include_once("class/MySQLConnection.php");
+include_once("class/Cage.php");
+include_once("class/Gate.php");
+
+class AdminDAO{
     private static $conn;
     public function __construct(){
             $dbh = new MySQLConnection();
