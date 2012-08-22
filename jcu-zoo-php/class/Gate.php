@@ -23,6 +23,29 @@ class Gate {
     function getGateId(){
         return $this->gateId;
     }
+    function open(){
+        $this->isClosed = false;
+    }
+    function close(){
+        $this->isClosed = true;
+    }
+    function lock(){
+        $this->isLocked = true;
+    }
+    function unlock(){
+        $this->isLocked = false;
+    }
+    function toString(){
+        return $this->gateId . 
+                ", isClosed: " . $this->isClosed() .
+                ", isLocked: " . $this->isLocked();
+    }
+    function isClosed(){
+        return $this->isClosed;
+    }
+    function isLocked(){
+        return $this->isLocked;
+    }
 }
 
 ?>
