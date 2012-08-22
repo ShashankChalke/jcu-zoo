@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <?php
 
-include_once('class/AdminDAO.php');
-include_once('class/Cage.php');
+require_once('class/AdminDAO.php');
+require_once('class/Cage.php');
 class AdminUI{
     private $admin;
     

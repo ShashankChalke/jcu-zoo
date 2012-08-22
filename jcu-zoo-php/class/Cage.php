@@ -9,9 +9,9 @@
  *
  * @author Panda
  */
-include_once("AdminDAO.php");
+require_once("AdminDAO.php");
 class Cage{
-    public static $adminDAO;
+    static $adminDAO;
     private $cageId;
     private $cageName;
     private $exhibitName;
@@ -35,7 +35,7 @@ class Cage{
     }
     static function loadDefaultMemberFields(){
          if (!isset(Cage::$adminDAO)){
-            self::$adminDAO = new AdminDAO();
+            Cage::$adminDAO = new AdminDAO();
 
         }
     }
@@ -141,9 +141,11 @@ class Cage{
         $this->hasHuman = $hasHuman;
     }
     public function addGate(){
+                Cage::loadDefaultMemberFields();
         Cage::$adminDAO->addGateToCage($this);
     }
     public function removeGate(){
+                Cage::loadDefaultMemberFields();
         Cage::$adminDAO->removeGate($this);
     }
 }
